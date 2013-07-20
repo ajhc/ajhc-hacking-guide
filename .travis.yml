@@ -3,8 +3,8 @@ before_install:
   - uname -a
   - cat /proc/cpuinfo
   - cat /proc/meminfo
+  - sudo sh -c 'echo "deb http://ppa.launchpad.net/texlive-backports/ppa/ubuntu precise main" >> /etc/apt/sources.list'
   - cat /etc/apt/sources.list
-  - sudo apt-add-repository ppa:texlive-backports/ppa
   - sudo apt-get -qq update
   - sudo apt-get -qq -y install omake texlive-lang-cjk libreoffice ruby1.9.1-full
   - sudo gem1.9.1 install review
