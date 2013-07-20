@@ -1,0 +1,21 @@
+RE_FILES    = $(glob *.re)
+ODG_FILES   = $(glob images/*/*.odg)
+PNG_FILES   = $(replacesuffixes .odg, .png, $(ODG_FILES))
+OTHER_FILES = ajhc-hg.yaml CHAPS PREDEF POSTDEF _cover.tex
+
+ajhc-hg.pdf: $(RE_FILES) $(PNG_FILES) $(OTHER_FILES)
+	rm -f ajhc-hg.pdf
+	review-pdfmaker ajhc-hg.yaml
+
+.SUBDIRS: $(glob images/*/)
+	%.png: %.odg
+		unoconv -f png -o $@ $< || unoconv -n -f png -o $@ $< \
+		|| unoconv -f png -o $@ $< || unoconv -n -f png -o $@ $<
+
+.DEFAULT: ajhc-hg.pdf
+
+.PHONY: clean
+
+clean:
+	rm -f ajhc-hg.pdf *~
+	rm -f images/*/*.png
