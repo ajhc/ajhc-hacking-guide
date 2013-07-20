@@ -10,11 +10,29 @@ Ajhcはセルフホスティングできておらず、GHCの独自拡張に頼�
 
 === Linux
 
+//cmd{
+$ sudo apt-get install libwww-perl libconfig-yaml-perl haskell-platform cpphs \
+ libgc-dev gcc-multilib
+$ cabal update
+$ cabal install ajhc
+//}
+
 === Windows
 
 === Mac OS X
 
 == コンパイルの流れ
+
+まずは簡単なプログラムをコンパイルしてみましょう。
+
+//cmd{
+$ echo 'main = print "hoge"' > Hoge.hs
+$ ajhc Hoge.hs
+$ ./hs.out
+"hoge"
+//}
+
+このhs.outというファイルはどのようにしてAjhcが生成したのでしょう？
 
 //image[ajhc_compile][Ajhcによるコンパイルの流れ][width=10cm]
 
