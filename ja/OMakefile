@@ -14,7 +14,12 @@ ajhc-hg.pdf: $(RE_FILES) $(PNG_FILES) $(OTHER_FILES)
 
 .DEFAULT: ajhc-hg.pdf
 
-.PHONY: clean
+.PHONY: clean publish
+
+publish: ajhc-hg.pdf
+	ssh sakura.masterq.net mkdir -p ~/vhosts/files.metasepi/ajhc
+	ssh sakura.masterq.net rm -f ~/vhosts/files.metasepi/ajhc/ajhc-hg-ja.pdf
+	scp ajhc-hg.pdf sakura.masterq.net\:~/vhosts/files.metasepi/ajhc/ajhc-hg-ja.pdf
 
 clean:
 	rm -f ajhc-hg.pdf *~
