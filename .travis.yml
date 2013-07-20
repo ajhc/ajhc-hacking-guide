@@ -8,7 +8,8 @@ before_install:
   - cat /etc/apt/sources.list
   - sudo apt-get -qq update
   - sudo apt-get -qq -y --force-yes install omake texlive-lang-cjk libreoffice ruby1.9.1-full unoconv
-  - sudo gem1.9.1 install bundler rake rubygems-bundler rvm review
+  - sudo gem1.9.1 install bundler review
+  - sudo gem1.9.1 update review
 script:
   - omake
   - ls -l ja/ajhc-hg.pdf
