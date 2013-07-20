@@ -1,6 +1,1 @@
 .SUBDIRS: ja
-
-.PHONY: clean
-
-clean:
-	rm -f *~
