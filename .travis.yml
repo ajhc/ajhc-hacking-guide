@@ -3,10 +3,11 @@ before_install:
   - uname -a
   - cat /proc/cpuinfo
   - cat /proc/meminfo
-  - sudo sh -c 'echo "deb http://ppa.launchpad.net/texlive-backports/ppa/ubuntu precise main" >> /etc/apt/sources.list'
+  - sudo sh -c 'echo "\ndeb http://ppa.launchpad.net/texlive-backports/ppa/ubuntu precise main" >> /etc/apt/sources.list'
+  - sudo sh -c 'echo "\ndeb http://ppa.launchpad.net/libreoffice/ppa/ubuntu precise main" >> /etc/apt/sources.list'
   - cat /etc/apt/sources.list
   - sudo apt-get -qq update
-  - sudo apt-get -qq -y --force-yes install omake texlive-lang-cjk libreoffice ruby1.9.1-full
+  - sudo apt-get -qq -y --force-yes install omake texlive-lang-cjk libreoffice ruby1.9.1-full unoconv
   - sudo gem1.9.1 install review
 script:
   - omake
