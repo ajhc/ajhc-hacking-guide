@@ -7,7 +7,7 @@ before_install:
   - sudo sh -c 'echo "\ndeb http://ppa.launchpad.net/libreoffice/ppa/ubuntu precise main" >> /etc/apt/sources.list'
   - cat /etc/apt/sources.list
   - sudo apt-get -qq update
-  - sudo apt-get -qq -y --force-yes install omake texlive-lang-cjk libreoffice ruby1.9.1-full unoconv
+  - sudo apt-get -qq -y --force-yes install omake texlive-lang-cjk libreoffice ruby1.9.1-full unoconv bundler
   - sudo gem1.9.1 install review
 script:
   - omake
