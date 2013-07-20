@@ -1,5 +1,9 @@
 # Book: [Ajhc](http://ajhc.metasepi.org/) Hacking Guide
 
+## Where is the book
+
+* In Japanese: http://files.metasepi.org/ajhc/ajhc-hg-ja.pdf
+
 ## How to build
 
     $ omake
