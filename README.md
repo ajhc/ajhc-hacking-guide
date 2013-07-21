@@ -8,10 +8,9 @@
 
 Get your Debian wheezy PC and setup it.
 
-    $ sudo apt-get install git omake unoconv libreoffice texlive-lang-cjk ruby-full bundler okular
+    $ sudo apt-get install git omake unoconv libreoffice texlive-lang-cjk ruby-full rake bundler okular
     $ git clone https://github.com/kmuto/review.git
     $ cd review
-    $ rake
     $ sudo rake install
 
 Build me.
