@@ -6,6 +6,18 @@
 
 ## How to build
 
+Get your Debian wheezy PC and setup it.
+
+    $ sudo apt-get install git omake unoconv libreoffice texlive-lang-cjk ruby-full bundler okular
+    $ git clone https://github.com/kmuto/review.git
+    $ cd review
+    $ rake
+    $ sudo rake install
+
+Build me.
+
+    $ git clone https://github.com/ajhc/ajhc-hacking-guide.git
+    $ cd ajhc-hacking-guide
     $ omake
     $ okular ja/ajhc-hg.pdf
 
