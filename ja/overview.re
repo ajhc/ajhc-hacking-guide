@@ -10,11 +10,14 @@ Ajhcはセルフホスティングできておらず、GHCの独自拡張に頼�
 
 === Linux
 
+このインストール例はDebian系ディストリビューションのものです。
+他のディストリビューションを使用されている方はapt-getによるパッケージ設定を読み替えてください。
+
 //cmd{
-$ sudo apt-get install libwww-perl libconfig-yaml-perl haskell-platform cpphs \
- libgc-dev gcc-multilib
+$ sudo apt-get install haskell-platform libncurses5-dev gcc
 $ cabal update
 $ cabal install ajhc
+$ export PATH=$HOME/.cabal/bin/:$PATH
 //}
 
 === Windows
