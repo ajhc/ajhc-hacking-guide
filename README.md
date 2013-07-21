@@ -8,10 +8,12 @@
 
 Get your Debian wheezy PC and setup it.
 
-    $ sudo apt-get install git omake unoconv libreoffice texlive-lang-cjk ruby-full rake bundler okular
+    $ sudo apt-get install git omake unoconv libreoffice texlive-lang-cjk texlive-fonts-recommended ruby-full rake bundler okular
     $ git clone https://github.com/kmuto/review.git
     $ cd review
     $ sudo rake install
+
+Then get settings for Japanese. http://uwabami.junkhub.org/log/20121202p01.html
 
 Build me.
 
