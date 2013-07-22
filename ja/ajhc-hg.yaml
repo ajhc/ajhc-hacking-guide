@@ -12,6 +12,8 @@ booktitle: Ajhc Hacking Guide
 
 # 著者
 aut: Metasepiチーム (岡部 究)
+prt_url: https://github.com/ajhc/ajhc-hacking-guide
+rights: (C) 2013 Metasepi team - Creative Commons Attribution-ShareAlike 3.0 Unported License.
 # 以下はオプション
 # prt: 出版社
 # asn: Associated name
@@ -19,11 +21,11 @@ aut: Metasepiチーム (岡部 究)
 # clb: 貢献者
 # edt: 編集者
 # dsr: デザイナ
-# ill: イラストレータ？
+# ill: イラストレータ
 # pht: 撮影者
 # trl: 翻訳者
 # date: 刊行日
-rights: Creative Commons Attribution-ShareAlike 3.0 Unported License.
+# rights: 権利表記
 # description: ブックの説明
 
 #
@@ -81,3 +83,6 @@ params: --stylesheet=ajhc-hg.css --subdirmode --chapterlink
 # デバッグフラグ。nilでないときには一時ファイルをカレントディレクトリ
 # に作成し、削除もしない
 # debug: nil
+
+# 奥付生成用
+colophon: true
