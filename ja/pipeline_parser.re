@@ -36,6 +36,8 @@ parseHsSource関数の型はそれぞれ以下の意味をもっています。
 
 xxx ここは図描くべき
 
+ということはパーサの魔法はFrontEnd.HsParser.parse関数の中で実現されていることになります。
+
 == パーサの構造
 
 FrontEnd.HsParser.parse関数は
@@ -55,6 +57,52 @@ GHCのレキシカルアナライザはAlex
 HappyはパーサとレキシカルアナライザをMonadic Parser
 @<href>{http://www.haskell.org/happy/doc/html/sec-monads.html}
 という方法で接合します。
+以下はこのMonadic Parserの宣言です。
+
+//list[ajhc_src_tree][Monadic Parserの宣言 (HsParser.yファイル)]{
+%monad { P } { thenP } { returnP }
+%lexer { lexer } { EOF }
+%name parse module
+%tokentype { Token }
+//}
+
+しかしこの宣言Haskellのソースコードではないため、実際の動作が想像できません。
+まずはPモナドを見てみましょう。
+
+//list[p_monad][Pモナド (ParseMonad.hsファイル)]{
+instance Monad P where
+	return a = P $ \_i _x _y _l s _m -> Ok s a
+	P m >>= k = P $ \i x y l s mode ->
+		case m i x y l s mode of
+		    Failed loc msg -> Failed loc msg
+		    Ok s' a -> runP (k a) i x y l s' mode
+	fail s = P $ \_r _col _line loc _stk _m -> Failed loc s
+
+returnP :: a -> P a
+returnP = return
+thenP :: P a -> (a -> P b) -> P b
+thenP = (>>=)
+//}
+
+@<code>{returnP}と@<code>{thenP}はそのままモナドの定義に別名をつけているだけです。
+@<code>{return}の定義は@<code>{Ok s a}を返す関数を@<code>{P}で包んでいます。
+@<code>{>>=}の定義はつまりPモナドが内包している関数を取り出して、
+外側に新しい関数を作りやはり@<code>{P}で包みます。
+その新しい関数はさっき取り出しは関数を評価して@<code>{Ok}ならbindの右辺値のPモナドの中にある関数を実行します。
+つまり接合されたPモナドを外側から順に評価するわけです。
+
+次はlexer関数の型を見てみましょう。
+
+//list[lexer_func][lexer関数の型 (Lexer.hsファイル)]{
+lexer :: (Token -> P a) -> P a
+lexer = runL topLexer
+
+topLexer :: Lex a Token
+//}
+
+
+
+xxx LexerとParserの関係図が必要
 
 == 内部表現
 

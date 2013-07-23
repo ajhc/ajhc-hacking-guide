@@ -191,7 +191,7 @@ ftheMain(gc_t gc,arena_t arena)
 
 ではHoge.hsからHoge.cを生成するコンパイラパイプラインはどのようなしくみなのでしょうか。
 
-xxx
+xxx 概要を追記すること
 
 == ランタイムの概要
 
@@ -212,6 +212,61 @@ Ajhcランタイムの内部は以下の要素を含んでいます。
 上記の要素はある程度POSIX APIに依存しています。
 これらの依存APIを自前で用意することで、
 Ajhcの吐き出すバイナリをPOSIXではない独自のアーキティクチャに移植できます。
+例えば先の@<code>{print "hoge"}するだけのHaskellプログラムはどの程度POSIXに依存しているのでしょうか。
+
+//cmd{
+$ cat Hoge.hs
+main = print "hoge"
+$ ajhc Hoge.hs
+$ size hs.out
+   text    data     bss     dec     hex filename
+  20544    1357     552   22453    57b5 hs.out
+$ ldd hs.out
+        linux-vdso.so.1 (0x00007fff217d7000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f4df2d10000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f4df30fc000)
+$ nm hs.out | grep -c "U "
+20
+$ nm hs.out | grep "U "
+                 U _IO_putc@@GLIBC_2.2.5
+                 U __libc_start_main@@GLIBC_2.2.5
+                 U _setjmp@@GLIBC_2.2.5
+                 U abort@@GLIBC_2.2.5
+                 U ctime@@GLIBC_2.2.5
+                 U exit@@GLIBC_2.2.5
+                 U fflush@@GLIBC_2.2.5
+                 U fprintf@@GLIBC_2.2.5
+                 U fputc@@GLIBC_2.2.5
+                 U fputs@@GLIBC_2.2.5
+                 U free@@GLIBC_2.2.5
+                 U fwrite@@GLIBC_2.2.5
+                 U getenv@@GLIBC_2.2.5
+                 U malloc@@GLIBC_2.2.5
+                 U memset@@GLIBC_2.2.5
+                 U posix_memalign@@GLIBC_2.2.5
+                 U realloc@@GLIBC_2.2.5
+                 U setlocale@@GLIBC_2.2.5
+                 U sysconf@@GLIBC_2.2.5
+                 U times@@GLIBC_2.2.5
+//}
+
+実行プログラムのサイズは20kB程度しかなく、依存するライブラリはlibcのみ。
+そして未解決シンボルは20個しかありません。
+極論するとこの20個のシンボルに対応する実装をAjhcランタイムの下に配置できれば、
+Ajhcの吐き出すバイナリの移植は完了したことになります。
+
+実はマイコンなどへの移植はもっと簡単にでき、シリアルコンソール対応を考えなければ以下のシンボルのみ実装すれば良いことがわかっています。
+
+ * abort
+ * free
+ * malloc
+ * memset
+ * realloc
+
+つまりAjhcランタイムの主な依存はmalloc機構のみ、ということになります。
+マイコンへのAjhcバイナリの移植例は
+@<href>{https://github.com/ajhc/demo-cortex-m3}
+を参考にしてください。
 
 == ソースコード配置
 
