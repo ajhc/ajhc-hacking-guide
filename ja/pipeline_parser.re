@@ -27,12 +27,34 @@ parseHsSource関数の型はそれぞれ以下の意味をもっています。
  * 第三引数 "@<code>{LBS.ByteString}": Haskellソースコードの中身、文字列
  * 返値 "@<code>{(HsModule, LBS.ByteString)}": パース結果とHaskellソースコードファイル名
 
-== パーサの構造
+このparseHsSource関数とその近辺は何をやっているのでしょうか。
 
  * preprocess関数でCPPやm4のプリプロセッサを通す
  * collectFileOpts関数でHaskellソースのプラグマからコンパイルオプションを抽出
  * runParserWithMode関数呼び出し
  * FrontEnd.HsParser.parseの中のモナドを実行
+
+xxx ここは図描くべき
+
+== パーサの構造
+
+FrontEnd.HsParser.parse関数は
+@<href>{https://github.com/ajhc/ajhc/blob/arafura/src/FrontEnd/HsParser.y}
+で定義されています。このファイルはHappy
+@<href>{http://www.haskell.org/happy/}
+というパーサジェネレータでHaskellコードに変換されてからコンパイルされます。
+
+レキシカルアナライザ(字句解析器)は
+FrontEnd.Lexer.lexer関数です。
+@<href>{https://github.com/ajhc/ajhc/blob/arafura/src/FrontEnd/Lexer.hs}
+で定義されています。
+GHCのレキシカルアナライザはAlex
+@<href>{http://www.haskell.org/alex/}
+を使って書かれていましたが、Ajhcでは生のHaskellコードです。
+
+HappyはパーサとレキシカルアナライザをMonadic Parser
+@<href>{http://www.haskell.org/happy/doc/html/sec-monads.html}
+という方法で接合します。
 
 == 内部表現
 

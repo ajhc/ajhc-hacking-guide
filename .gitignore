@@ -2,6 +2,7 @@
 .omakedb.lock
 OMakefile.omc
 OMakeroot.omc
+ja/ajhc-hg-pdf
 */ajhc-hg.pdf
 ja/images/*/*.png
 *~
