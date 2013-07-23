@@ -5,6 +5,7 @@ OTHER_FILES = ajhc-hg.yaml CHAPS PREDEF POSTDEF _cover.tex
 
 ajhc-hg.pdf: $(RE_FILES) $(PNG_FILES) $(OTHER_FILES)
 	rm -f ajhc-hg.pdf
+	rm -rf ajhc-hg-pdf
 	review-pdfmaker ajhc-hg.yaml
 
 .SUBDIRS: $(glob images/*/)
@@ -24,3 +25,4 @@ publish: ajhc-hg.pdf
 clean:
 	rm -f ajhc-hg.pdf *~
 	rm -f images/*/*.png
+	rm -rf ajhc-hg-pdf

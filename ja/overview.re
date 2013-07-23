@@ -292,3 +292,9 @@ jhcの原作者であるJohn Meachamの修正待ちになっています。
 Creative Commons Attribution-ShareAlike 3.0 Unported License
 @<href>{http://creativecommons.org/licenses/by-sa/3.0/}
 で配布されています。
+
+この本表紙のイカさん写真はSilke Baronのものです。
+@<href>{http://www.flickr.com/photos/silkebaron/931381358/}
+この写真に限り Creative Commons Attribution 2.0 Generic License
+@<href>{http://creativecommons.org/licenses/by/2.0/deed.en}
+で配布されています。

@@ -83,6 +83,7 @@ params: --stylesheet=ajhc-hg.css --subdirmode --chapterlink
 # デバッグフラグ。nilでないときには一時ファイルをカレントディレクトリ
 # に作成し、削除もしない
 # debug: nil
+debug: true
 
 # 奥付生成用
 colophon: true
