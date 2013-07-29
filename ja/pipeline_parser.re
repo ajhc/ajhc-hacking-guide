@@ -70,6 +70,16 @@ HappyはパーサとレキシカルアナライザをMonadic Parser
 まずはPモナドを見てみましょう。
 
 //list[p_monad][Pモナド (ParseMonad.hsファイル)]{
+newtype P a = P { runP ::
+		        String		-- input string
+		     -> Int		-- current column
+		     -> Int		-- current line
+		     -> SrcLoc		-- location of last token read
+		     -> ParseState	-- layout info.
+		     -> ParseMode	-- parse parameters
+		     -> ParseStatus a
+		}
+
 instance Monad P where
 	return a = P $ \_i _x _y _l s _m -> Ok s a
 	P m >>= k = P $ \i x y l s mode ->
@@ -85,7 +95,7 @@ thenP = (>>=)
 //}
 
 @<code>{returnP}と@<code>{thenP}はそのままモナドの定義に別名をつけているだけです。
-@<code>{return}の定義は@<code>{Ok s a}を返す関数を@<code>{P}で包んでいます。
+@<code>{return}の定義は@<code>{Ok s a}を返す関数をP型で包んでいます。
 @<code>{>>=}の定義はつまりPモナドが内包している関数を取り出して、
 外側に新しい関数を作りやはり@<code>{P}で包みます。
 その新しい関数はさっき取り出しは関数を評価して@<code>{Ok}ならbindの右辺値のPモナドの中にある関数を実行します。
@@ -93,14 +103,43 @@ thenP = (>>=)
 
 次はlexer関数の型を見てみましょう。
 
-//list[lexer_func][lexer関数の型 (Lexer.hsファイル)]{
+//list[lexer_func][Lex rモナド]{
+-- ParseMonad.hsファイル
+newtype Lex r a = Lex { runL :: (a -> P r) -> P r }
+
+instance Monad (Lex r) where
+	return a = Lex $ \k -> k a
+	Lex v >>= f = Lex $ \k -> v (\a -> runL (f a) k)
+	Lex v >> Lex w = Lex $ \k -> v (\_ -> w k)
+	fail s = Lex $ \_ -> fail s
+
+-- Lexer.hsファイル
 lexer :: (Token -> P a) -> P a
 lexer = runL topLexer
 
 topLexer :: Lex a Token
 //}
 
+なんとLex rもモナドです。
 
+//list[lexer_func][PとLexの接合]{
+-- HsParser.hsファイル
+happyNewToken action sts stk
+	= lexer(\tk -> 
+	let cont i = happyDoAction i tk action sts stk in
+	case tk of {
+	EOF -> happyDoAction 86# tk action sts stk;
+	VarId happy_dollar_dollar -> cont 1#;
+-- snip --
+	KW_Closed -> cont 85#;
+	_ -> happyError' tk
+	})
+
+happyParse start_state = happyNewToken start_state notHappyAtAll notHappyAtAll
+
+parse = happySomeParser where
+  happySomeParser = happyThen (happyParse 0#) (\x -> happyReturn (happyOut5 x))
+//}
 
 xxx LexerとParserの関係図が必要
 
