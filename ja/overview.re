@@ -14,7 +14,7 @@ Ajhcはセルフホスティングできておらず、GHCの独自拡張に頼�
 他のディストリビューションを使用されている方はapt-getによるパッケージ設定を読み替えてください。
 
 //cmd{
-$ sudo apt-get install haskell-platform libncurses5-dev gcc
+$ sudo apt-get install haskell-platform libncurses5-dev libwww-perl gcc m4
 $ cabal update
 $ cabal install ajhc
 $ export PATH=$HOME/.cabal/bin/:$PATH
