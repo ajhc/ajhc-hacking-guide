@@ -143,6 +143,53 @@ parse = happySomeParser where
 
 xxx LexerとParserの関係図が必要
 
+パース結果である構文木はHsModule型のhsModuleDeclsメンバーに保存され、
+さらに複数のソースコードやコンパイル済みライブラリなどを一元管理するDone型に集められます。
+
 == 内部表現
 
-HsDecl
+=== HsModule型
+
+パース結果に問題がなければ、runParserWithMode関数はこの型を返します。
+
+//list[HsModule][HsModule型]{
+data HsModule = HsModule {
+    hsModuleName    :: Module,
+    hsModuleSrcLoc  :: SrcLoc,
+    hsModuleExports :: (Maybe [HsExportSpec]),
+    hsModuleImports :: [HsImportDecl],
+    hsModuleDecls   :: [HsDecl],
+    hsModuleOptions :: [String],
+    hsModuleOpt     :: Opt
+    }
+//}
+
+=== HsDecl型
+
+Haskellソースコードの構文木。
+HsModule型に内包されています。
+
+=== Done型
+
+パースの完了した構文木を保管しています。
+このDone型はIORefを使って色々な関数の間でパース結果の受け渡しに用いられます。
+
+//list[Done][Done型]{
+data Done = Done {
+    hoCache         :: Maybe FilePath,
+    knownSourceMap  :: Map.Map SourceHash (Module,[(Module,SrcLoc)]),
+    validSources    :: Set.Set SourceHash,
+    loadedLibraries :: Map.Map LibraryName Library,
+    hosEncountered  :: Map.Map HoHash     (FilePath,HoHeader,HoIDeps,Ho),
+    modEncountered  :: Map.Map Module     ModDone
+    }
+
+data ModDone
+    = ModNotFound
+    | ModLibrary !Bool ModuleGroup Library
+    | Found SourceCode
+
+data SourceCode
+    = SourceParsed     { sourceInfo :: !SourceInfo, sourceModule :: HsModule }
+    | SourceRaw        { sourceInfo :: !SourceInfo, sourceLBS :: LBS.ByteString }
+//}
