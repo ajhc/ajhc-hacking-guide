@@ -2,6 +2,7 @@ whats_ajhc.re
 overview.re
 
 pipeline_parser.re
+pipeline_grin.re
 pipeline_toc.re
 
 runtime.re
